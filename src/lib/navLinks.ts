@@ -16,6 +16,7 @@ export const navLinks = [
     href: "/dashboard/templates",
     icon: SquareCheck,
   },
+
   // {
   //   name: "Planning",
   //   href: "/dashboard/planning",
