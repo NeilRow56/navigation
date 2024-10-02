@@ -9,26 +9,28 @@ import { SideNavItem } from "@/types";
 import { Icon } from "@iconify/react";
 import { SIDENAV_ITEMS } from "../shared/constants";
 import { Logo } from "../shared/Logo";
+import Menu from "../users/Menu";
 
 const SideNav = () => {
   return (
-    <div className="md:w-60  h-screen flex-1 fixed border-r border-zinc-200 hidden md:flex">
-      <div className="flex flex-col space-y-6 w-full">
+    <div className="fixed hidden h-screen flex-1 border-r border-zinc-200 md:flex md:w-60">
+      <div className="ml-3 flex w-full flex-col space-y-6">
         <Link
           href="/"
-          className="flex flex-row space-x-3 items-center justify-center md:justify-start md:px-6 border-b border-zinc-200 h-12 w-full"
+          className="flex h-12 w-full flex-row items-center justify-center space-x-3 border-b border-zinc-200 md:justify-start md:px-6"
         >
           {/* <span className="h-7 w-7 bg-zinc-300 rounded-lg" /> */}
-          <span className="font-bold text-xl hidden md:flex">
+          <span className="hidden text-xl font-bold md:flex">
             <Logo />
           </span>
         </Link>
 
-        <div className="flex flex-col space-y-2  md:px-6 ">
+        {/* <div className="flex flex-col space-y-2  md:px-6 ">
           {SIDENAV_ITEMS.map((item, idx) => {
             return <MenuItem key={idx} item={item} />;
           })}
-        </div>
+        </div> */}
+        <Menu />
       </div>
     </div>
   );
@@ -49,13 +51,13 @@ const MenuItem = ({ item }: { item: SideNavItem }) => {
         <>
           <button
             onClick={toggleSubMenu}
-            className={`flex flex-row items-center p-2 rounded-lg hover-bg-zinc-100 w-full justify-between hover:bg-zinc-100 dark:hover:bg-zinc-700 ${
+            className={`hover-bg-zinc-100 flex w-full flex-row items-center justify-between rounded-lg p-2 hover:bg-zinc-100 dark:hover:bg-zinc-700 ${
               pathname.includes(item.path) ? "bg-zinc-100 dark:bg-zinc-700" : ""
             }`}
           >
-            <div className="flex flex-row space-x-4 items-center">
+            <div className="flex flex-row items-center space-x-4">
               {item.icon}
-              <span className="font-semibold text-xl  flex">{item.title}</span>
+              <span className="flex text-xl font-semibold">{item.title}</span>
             </div>
 
             <div className={`${subMenuOpen ? "rotate-180" : ""} flex`}>
@@ -84,12 +86,12 @@ const MenuItem = ({ item }: { item: SideNavItem }) => {
       ) : (
         <Link
           href={item.path}
-          className={`flex flex-row space-x-4 items-center p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-700 ${
+          className={`flex flex-row items-center space-x-4 rounded-lg p-2 hover:bg-zinc-100 dark:hover:bg-zinc-700 ${
             item.path === pathname ? "bg-zinc-100" : ""
           }`}
         >
           {item.icon}
-          <span className="font-semibold text-xl flex">{item.title}</span>
+          <span className="flex text-xl font-semibold">{item.title}</span>
         </Link>
       )}
     </div>
