@@ -10,3 +10,13 @@ export type SideNavItem = {
 //   item: SideNavItem;
 //   toggleOpem: () => void;
 // };
+
+export type UserProps = {
+  name: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  image: string;
+  email: string;
+  password: string;
+};
