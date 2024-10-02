@@ -13,154 +13,190 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum UserRole {
-  ADMIN
-  CLIENT
-  MEMBER
-  USER
+model Admin {
+  id         String @id @default(auto()) @map("_id") @db.ObjectId
+  username   String @unique
 }
 
-model User {
- id              String @id @default(auto()) @map("_id") @db.ObjectId
- name            String
- firstName       String
- lastName        String
- email           String       @unique 
- isVerified      Boolean      @default(false)
- token           Int?
- emailVerified   DateTime?
- imageUrl        String? 
- password        String?
- projects        Project[]
- portfolioItems  PortfolioItem[]
- payments        Payment[]
- invoices        Invoice[]
- accounts        Account[]
- role            UserRole       @default(USER)
- status          Boolean        @default(true)
- createdAt       DateTime       @default(now())
- updatedAt       DateTime       @updatedAt
-
-@@map("users")
- 
+model Student {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  username    String       @unique
+  name        String
+  surname     String
+  email       String?      @unique
+  phone       String?      @unique
+  address     String
+  img         String?
+  bloodType   String
+  sex         UserSex
+  createdAt   DateTime     @default(now())
+  parentId    String      @db.ObjectId
+  parent      Parent       @relation(fields: [parentId], references: [id])
+  classId     String   @db.ObjectId
+  class       Class        @relation(fields: [classId], references: [id])
+  gradeId     String   @db.ObjectId
+  grade       Grade        @relation(fields: [gradeId], references: [id])
+  attendances Attendance[]
+  results     Result[]
+  birthday    DateTime
 }
 
-model Category {
- id               String @id @default(auto()) @map("_id") @db.ObjectId
- title            String
- slug             String        @unique 
- imageUrl         String? 
- description      String?
- createdAt        DateTime       @default(now())
- updatedAt        DateTime       @updatedAt
-}
-// model Client {
-//  id               String @id @default(auto()) @map("_id") @db.ObjectId
-//  title            String
-//  slug             String        @unique 
-//  imageUrl         String? 
-//  description      String?
-//  projects         Project[]
-//  createdAt        DateTime       @default(now())
-//  updatedAt        DateTime       @updatedAt
-// }
-
-
-model Account {
- id String @id @default(auto()) @map("_id") @db.ObjectId
- userId             String   @db.ObjectId
- type               String
- provider           String
- providerAccountId  String
- refresh_token      String?  @db.String
- access_token       String?  @db.String
- expires_at         Int?
- token_type         String?
- scope              String?
- id_token           String?  @db.String
- session_state      String?
- user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
- @@unique([provider, providerAccountId])
- @@map("accounts")
+model Teacher {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  username  String    @unique
+  name      String
+  surname   String
+  email     String?   @unique
+  phone     String?   @unique
+  address   String
+  img       String?
+  bloodType String
+  sex       UserSex
+  createdAt DateTime  @default(now())
+  subjects  Subject[]
+  lessons   Lesson[]
+  classes   Class[]
+  birthday  DateTime
 }
 
-model Module {
- id String @id @default(auto()) @map("_id") @db.ObjectId
- name               String
- project            Project @relation(fields: [projectId], references: [id])
- projectId          String   @db.ObjectId
- tasks              Task[]
- createdAt          DateTime @default(now())
- updatedAt          DateTime @updatedAt
+model Parent {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  username  String    @unique
+  name      String
+  surname   String
+  email     String?   @unique
+  phone     String    @unique
+  address   String
+  createdAt DateTime  @default(now())
+  students  Student[]
 }
 
+model Grade {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  level Int @unique
 
-model Project {
- id String @id @default(auto()) @map("_id") @db.ObjectId
- name               String
- description        String?
- startDate          DateTime
- endDate            DateTime?
- modules            Module[]
- invoices           Invoice[]
- status             String
- clientId           String   @db.ObjectId
- user               User @relation(fields: [userId], references: [id])
- userId             String   @db.ObjectId
+  students Student[]
+  classess Class[]
 }
 
+model Class {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  name     String @unique
+  capacity Int
 
-model Task {
- id String @id @default(auto()) @map("_id") @db.ObjectId
- title              String
- description        String?
- status             String
- dueDate            DateTime?
- module             Module @relation(fields: [moduleId], references: [id])
- moduleId           String   @db.ObjectId
- createdAt          DateTime @default(now())
- updatedAt          DateTime @updatedAt
+  supervisorId  String?       @db.ObjectId
+  supervisor    Teacher?       @relation(fields: [supervisorId], references: [id])
+  lessons       Lesson[]
+  students      Student[]
+  gradeId       String         @db.ObjectId
+  grade         Grade          @relation(fields: [gradeId], references: [id])
+  events        Event[]
+  announcements Announcement[]
 }
 
-model Payment {
- id String @id @default(auto()) @map("_id") @db.ObjectId
- amount             Float
- date               DateTime
- method             String
- user               User @relation(fields: [userId], references: [id])
- userId             String   @db.ObjectId
- 
- 
+model Subject {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  name     String    @unique
+  teacherId   String   @db.ObjectId
+  teacher     Teacher      @relation(fields: [teacherId], references: [id])
+  lessons  Lesson[]
 }
 
-model Invoice {
-id String @id @default(auto()) @map("_id") @db.ObjectId
- amount             Float
- invoiceNumber      String   @unique
- status             String
- date               DateTime
- dueDate            DateTime
- project            Project @relation(fields: [projectId], references: [id])
- projectId          String   @db.ObjectId
- user               User @relation(fields: [userId], references: [id])
- userId             String   @db.ObjectId
- createdAt          DateTime @default(now())
- updatedAt          DateTime @updatedAt
+model Lesson {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  day       Day
+  startTime DateTime
+  endTime   DateTime
+
+  subjectId   String   @db.ObjectId
+  subject     Subject      @relation(fields: [subjectId], references: [id])
+  classId     String   @db.ObjectId
+  class       Class        @relation(fields: [classId], references: [id])
+  teacherId   String   @db.ObjectId
+  teacher     Teacher      @relation(fields: [teacherId], references: [id])
+  exams       Exam[]
+  assignments Assignment[]
+  attendances Attendance[]
 }
 
-model PortfolioItem {
-id String @id @default(auto()) @map("_id") @db.ObjectId
- title              String
- imageUrl           String? 
- projectUrl         String? 
- description        String
- date               DateTime
- dueDate            DateTime
- user               User @relation(fields: [userId], references: [id])
- userId             String   @db.ObjectId
- createdAt          DateTime @default(now())
- updatedAt          DateTime @updatedAt
+model Exam {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  startTime DateTime
+  endTime   DateTime
+
+  lessonId  String   @db.ObjectId
+  lesson   Lesson   @relation(fields: [lessonId], references: [id])
+  results  Result[]
+}
+
+model Assignment {
+  id        String @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  startDate DateTime
+  dueDate   DateTime
+
+  lessonId  String   @db.ObjectId
+  lesson   Lesson   @relation(fields: [lessonId], references: [id])
+  results  Result[]
+}
+
+model Result {
+  id              String @id @default(auto()) @map("_id") @db.ObjectId
+  score        Int
+
+  examId       String?   @db.ObjectId
+  exam         Exam?       @relation(fields: [examId], references: [id])
+  assignmentId String?   @db.ObjectId
+  assignment   Assignment? @relation(fields: [assignmentId], references: [id])
+  studentId    String   @db.ObjectId
+  student      Student     @relation(fields: [studentId], references: [id])
+}
+
+model Attendance {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  date    DateTime
+  present Boolean
+
+  studentId String  @db.ObjectId
+  student   Student @relation(fields: [studentId], references: [id])
+  lessonId  String   @db.ObjectId
+  lesson    Lesson  @relation(fields: [lessonId], references: [id])
+}
+
+model Event {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  startTime   DateTime
+  endTime     DateTime
+
+  classId     String?   @db.ObjectId
+  class       Class? @relation(fields: [classId], references: [id])
+}
+
+model Announcement {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  date        DateTime
+
+  classId     String?   @db.ObjectId
+  class       Class? @relation(fields: [classId], references: [id])
+}
+
+enum UserSex {
+  MALE
+  FEMALE
+}
+
+enum Day {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
 }
 
 
