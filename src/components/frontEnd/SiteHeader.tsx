@@ -7,6 +7,8 @@ import { useSelectedLayoutSegment } from "next/navigation";
 
 import useScroll from "@/hooks/use-scroll";
 import { cn } from "@/lib/utils";
+import { Logo } from "../shared/Logo";
+import { ThemeToggle } from "../dashboard/ThemeToggle";
 
 const SiteHeader = () => {
   const scrolled = useScroll(5);
@@ -18,7 +20,7 @@ const SiteHeader = () => {
         `sticky inset-x-0 top-0 z-30 w-full transition-all border-b border-gray-200`,
         {
           "border-b border-gray-200 bg-white/75 backdrop-blur-lg": scrolled,
-          "border-b border-gray-200 bg-white": selectedLayout,
+          "border-b border-gray-200 ": selectedLayout,
         },
       )}
     >
@@ -28,14 +30,16 @@ const SiteHeader = () => {
             href="/"
             className="flex flex-row space-x-3 items-center justify-center md:hidden"
           >
-            <span className="h-7 w-7 bg-zinc-300 rounded-lg" />
-            <span className="font-bold text-xl flex ">Logo</span>
+            {/* <span className="h-7 w-7 bg-zinc-300 rounded-lg" /> */}
+            <span className="font-bold text-xl flex ">
+              <Logo />
+            </span>
           </Link>
         </div>
 
         <div className="hidden md:block">
-          <div className="h-8 w-8 rounded-full bg-zinc-300 flex items-center justify-center text-center">
-            <span className="font-semibold text-sm">HQ</span>
+          <div className="h-8 w-8 rounded-full  flex items-center justify-center text-center">
+            <ThemeToggle />
           </div>
         </div>
       </div>
