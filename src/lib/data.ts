@@ -2,7 +2,7 @@
 
 //Enter admin, student, parent, teacher to see appropriate sidenavbar
 
-export let role = "teacher";
+export let role = "admin";
 
 export const teachersData = [
   {

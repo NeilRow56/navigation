@@ -113,6 +113,24 @@ const menuItems = [
         href: "/logout",
         visible: ["admin", "teacher", "student", "parent"],
       },
+      {
+        icon: "/profile.png",
+        label: "Teachers",
+        href: "/teachers",
+        visible: ["admin", "teacher", "student", "parent"],
+      },
+      {
+        icon: "/profile.png",
+        label: "Students",
+        href: "/students",
+        visible: ["admin", "teacher", "student", "parent"],
+      },
+      {
+        icon: "/profile.png",
+        label: "Parents",
+        href: "/parents",
+        visible: ["admin", "teacher", "student", "parent"],
+      },
     ],
   },
 ];
