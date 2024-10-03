@@ -1,7 +1,7 @@
 import Pagination from "@/components/shared/Pagination";
 import Table from "@/components/shared/Table";
 import TableSearch from "@/components/shared/TableSearch";
-import { teachersData } from "@/lib/data";
+import { role, teachersData } from "@/lib/data";
 import { Eye, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -88,11 +88,11 @@ const TeachersListPage = () => {
               <Eye className="m-1 text-gray-600" />
             </button>
           </Link>
-
-          <button className="flex h-7 w-7 items-center justify-center rounded-full bg-red-400">
-            {/* <Image src="/delete.png" alt="" width={16} height={16} /> */}
-            <Trash2 className="m-1 text-white" />
-          </button>
+          {role === "admin" && (
+            <button className="flex h-7 w-7 items-center justify-center rounded-full bg-red-400">
+              <Trash2 className="m-1 text-white" />
+            </button>
+          )}
         </div>
       </td>
     </tr>
