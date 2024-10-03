@@ -2,6 +2,7 @@ import Pagination from "@/components/shared/Pagination";
 import Table from "@/components/shared/Table";
 import TableSearch from "@/components/shared/TableSearch";
 import { teachersData } from "@/lib/data";
+import { Eye, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -36,7 +37,7 @@ const columns = [
   {
     header: "Classes",
     accessor: "classes",
-    className: "hidden md:table-cell",
+    className: "hidden xl:table-cell",
   },
   {
     header: "Phone",
@@ -58,7 +59,7 @@ const TeachersListPage = () => {
   const renderRow = (item: Teacher) => (
     <tr
       key={item.id}
-      className="border-b border-gray-200 text-sm even:bg-slate-50 hover:bg-lamaPurpleLight"
+      className="border-b border-gray-200 text-sm even:bg-slate-50 hover:bg-lamaPurpleLight dark:even:bg-slate-600"
     >
       <td className="flex items-center gap-4 p-4">
         <Image
@@ -70,27 +71,28 @@ const TeachersListPage = () => {
         />
         <div className="flex flex-col">
           <h3 className="font-semibold">{item.name}</h3>
-          <p className="text-xs text-gray-500">{item?.email}</p>
+          <p className="text-xs text-gray-600 dark:text-gray-300">
+            {item?.email}
+          </p>
         </div>
       </td>
       <td className="hidden md:table-cell">{item.teacherId}</td>
       <td className="hidden md:table-cell">{item.subjects.join(",")}</td>
-      <td className="hidden md:table-cell">{item.classes.join(",")}</td>
-      <td className="hidden md:table-cell">{item.phone}</td>
-      <td className="hidden md:table-cell">{item.address}</td>
+      <td className="hidden xl:table-cell">{item.classes.join(",")}</td>
+      <td className="hidden lg:table-cell">{item.phone}</td>
+      <td className="hidden lg:table-cell">{item.address}</td>
       <td>
         <div className="flex items-center gap-2">
           <Link href={`/list/teachers/${item.id}`}>
             <button className="flex h-7 w-7 items-center justify-center rounded-full bg-lamaSky">
-              <Image src="/view.png" alt="" width={16} height={16} />
+              <Eye className="m-1 text-gray-600" />
             </button>
           </Link>
-          {/* {role === "admin" && (
-                // <button className="w-7 h-7 flex items-center justify-center rounded-full bg-lamaPurple">
-                //   <Image src="/delete.png" alt="" width={16} height={16} />
-                // </button>
-                <FormModal table="teacher" type="delete" id={item.id}/>
-              )} */}
+
+          <button className="flex h-7 w-7 items-center justify-center rounded-full bg-red-400">
+            {/* <Image src="/delete.png" alt="" width={16} height={16} /> */}
+            <Trash2 className="m-1 text-white" />
+          </button>
         </div>
       </td>
     </tr>
