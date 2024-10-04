@@ -54,7 +54,7 @@ const ClassesListPage = () => {
       <td className="hidden md:table-cell">{item.supervisor}</td>
       <td>
         <div className="flex items-center gap-2">
-          <Link href={`/list/teachers/${item.id}`}>
+          <Link href={`/list/classes/${item.id}`}>
             <button className="flex h-7 w-7 items-center justify-center rounded-full bg-lamaSky">
               <Edit className="m-1 text-gray-600" />
             </button>

@@ -77,7 +77,7 @@ const StudentsListPage = () => {
       <td className="hidden lg:table-cell">{item.address}</td>
       <td>
         <div className="flex items-center gap-2">
-          <Link href={`/list/teachers/${item.id}`}>
+          <Link href={`/list/students/${item.id}`}>
             <button className="flex h-7 w-7 items-center justify-center rounded-full bg-lamaSky">
               <Eye className="m-1 text-gray-600" />
             </button>
