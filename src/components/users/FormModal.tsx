@@ -48,7 +48,7 @@ const FormModal = ({
         </button>
       </form>
     ) : (
-      type === "create" || type === "update"
+      "create or update form"
     );
   };
 
