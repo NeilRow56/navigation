@@ -1,6 +1,7 @@
 import Pagination from "@/components/shared/Pagination";
 import Table from "@/components/shared/Table";
 import TableSearch from "@/components/shared/TableSearch";
+import FormModal from "@/components/users/FormModal";
 import { role, teachersData } from "@/lib/data";
 import { Eye, PlusCircle, Trash2 } from "lucide-react";
 import Image from "next/image";
@@ -89,9 +90,7 @@ const TeachersListPage = () => {
             </button>
           </Link>
           {role === "admin" && (
-            <button className="flex h-7 w-7 items-center justify-center rounded-full bg-red-400">
-              <Trash2 className="m-1 text-white" />
-            </button>
+            <FormModal table="teacher" type="delete" id={item.id} />
           )}
         </div>
       </td>
@@ -111,12 +110,7 @@ const TeachersListPage = () => {
             <button className="flex h-8 w-8 items-center justify-center rounded-full bg-lamaYellow">
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
-            {role === "admin" && (
-              <button className="flex h-8 w-8 items-center justify-center rounded-full bg-lamaYellow">
-                <PlusCircle className="m-1 text-gray-600" />
-              </button>
-              //   <FormModal table="teacher" type="create"/>
-            )}
+            {role === "admin" && <FormModal table="teacher" type="create" />}
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import Pagination from "@/components/shared/Pagination";
 import Table from "@/components/shared/Table";
 import TableSearch from "@/components/shared/TableSearch";
+import FormModal from "@/components/users/FormModal";
 
 import { role, subjectsData } from "@/lib/data";
 import { Edit, PlusCircle, Trash2 } from "lucide-react";
@@ -38,21 +39,8 @@ const SubjectListPage = () => {
     >
       <td className="flex items-center gap-4 p-4">{item.name}</td>
       <td className="hidden md:table-cell">{item.teachers.join(", ")}</td>
+
       <td>
-        <div className="flex items-center gap-2">
-          <Link href={`/list/teachers/${item.id}`}>
-            <button className="flex h-7 w-7 items-center justify-center rounded-full bg-lamaSky">
-              <Edit className="m-1 text-gray-600" />
-            </button>
-          </Link>
-          {role === "admin" && (
-            <button className="flex h-7 w-7 items-center justify-center rounded-full bg-red-400">
-              <Trash2 className="m-1 text-white" />
-            </button>
-          )}
-        </div>
-      </td>
-      {/* <td>
         <div className="flex items-center gap-2">
           {role === "admin" && (
             <>
@@ -61,7 +49,7 @@ const SubjectListPage = () => {
             </>
           )}
         </div>
-      </td> */}
+      </td>
     </tr>
   );
 
@@ -82,7 +70,7 @@ const SubjectListPage = () => {
             {role === "admin" && (
               <button className="flex h-8 w-8 items-center justify-center rounded-full bg-lamaYellow">
                 <PlusCircle className="m-1 text-gray-600" />
-                {/* <FormModal table="teacher" type="create" /> */}
+                <FormModal table="teacher" type="create" />
               </button>
             )}
           </div>

@@ -1,10 +1,12 @@
 import Pagination from "@/components/shared/Pagination";
 import Table from "@/components/shared/Table";
 import TableSearch from "@/components/shared/TableSearch";
+import FormModal from "@/components/users/FormModal";
 import { assignmentsData, role } from "@/lib/data";
 import { Edit, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import React from "react";
 
 type Assignment = {
   id: number;
@@ -51,28 +53,14 @@ const AssignmentListPage = () => {
       <td className="hidden md:table-cell">{item.dueDate}</td>
       <td>
         <div className="flex items-center gap-2">
-          <Link href={`/list/teachers/${item.id}`}>
-            <button className="flex h-7 w-7 items-center justify-center rounded-full bg-lamaSky">
-              <Edit className="m-1 text-gray-600" />
-            </button>
-          </Link>
           {role === "admin" && (
-            <button className="flex h-7 w-7 items-center justify-center rounded-full bg-red-400">
-              <Trash2 className="m-1 text-white" />
-            </button>
-          )}
-        </div>
-      </td>
-      {/* <td>
-        <div className="flex items-center gap-2">
-          {role === "admin" || role === "teacher" && (
             <>
-              <FormModal table="assignment" type="update" data={item} />
-              <FormModal table="assignment" type="delete" id={item.id} />
+              <FormModal table="subject" type="update" data={item} />
+              <FormModal table="subject" type="delete" id={item.id} />
             </>
           )}
         </div>
-      </td> */}
+      </td>
     </tr>
   );
 
@@ -92,7 +80,10 @@ const AssignmentListPage = () => {
             <button className="flex h-8 w-8 items-center justify-center rounded-full bg-lamaYellow">
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
-            {/* {role === "admin" || role === "teacher" && <FormModal table="assignment" type="create" />} */}
+            {role === "admin" ||
+              (role === "teacher" && (
+                <FormModal table="assignment" type="create" />
+              ))}
           </div>
         </div>
       </div>

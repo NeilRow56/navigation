@@ -1,6 +1,7 @@
 import Pagination from "@/components/shared/Pagination";
 import Table from "@/components/shared/Table";
 import TableSearch from "@/components/shared/TableSearch";
+import FormModal from "@/components/users/FormModal";
 import { parentsData, role } from "@/lib/data";
 import { Edit, PlusCircle, Trash2 } from "lucide-react";
 import Image from "next/image";
@@ -62,17 +63,14 @@ const ParentsListPage = () => {
 
       <td className="hidden lg:table-cell">{item.phone}</td>
       <td className="hidden lg:table-cell">{item.address}</td>
+
       <td>
         <div className="flex items-center gap-2">
-          <Link href={`/list/teachers/${item.id}`}>
-            <button className="flex h-7 w-7 items-center justify-center rounded-full bg-lamaSky">
-              <Edit className="m-1 text-gray-600" />
-            </button>
-          </Link>
           {role === "admin" && (
-            <button className="flex h-7 w-7 items-center justify-center rounded-full bg-red-400">
-              <Trash2 className="m-1 text-white" />
-            </button>
+            <>
+              <FormModal table="parent" type="update" data={item} />
+              <FormModal table="parent" type="delete" id={item.id} />
+            </>
           )}
         </div>
       </td>
@@ -92,12 +90,7 @@ const ParentsListPage = () => {
             <button className="flex h-8 w-8 items-center justify-center rounded-full bg-lamaYellow">
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
-            {role === "admin" && (
-              <button className="flex h-8 w-8 items-center justify-center rounded-full bg-lamaYellow">
-                <PlusCircle className="m-1 text-gray-600" />
-              </button>
-              //   <FormModal table="teacher" type="create"/>
-            )}
+            {role === "admin" && <FormModal table="parent" type="create" />}
           </div>
         </div>
       </div>
