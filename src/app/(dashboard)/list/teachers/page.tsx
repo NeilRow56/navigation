@@ -4,6 +4,7 @@ import TableSearch from "@/components/shared/TableSearch";
 import FormModal from "@/components/users/FormModal";
 import { role, teachersData } from "@/lib/data";
 import db from "@/lib/db";
+import { ITEM_PER_PAGE } from "@/lib/settings";
 import { Class, Subject, Teacher } from "@prisma/client";
 import { Eye, PlusCircle, Trash2 } from "lucide-react";
 import Image from "next/image";
@@ -12,16 +13,11 @@ import React from "react";
 
 type TeacherList = Teacher & { subjects: Subject[] } & { classes: Class[] };
 
-const TeachersListPage = async () => {
-  const data = await db.teacher.findMany({
-    include: {
-      subjects: true,
-      classes: true,
-    },
-  });
-
-  console.log(data);
-
+const TeachersListPage = async ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined };
+}) => {
   const columns = [
     {
       header: "Info",
@@ -100,6 +96,25 @@ const TeachersListPage = async () => {
       </td>
     </tr>
   );
+
+  const { page, ...queryParams } = searchParams;
+
+  const p = page ? parseInt(page) : 1;
+
+  const [data, count] = await db.$transaction([
+    db.teacher.findMany({
+      include: {
+        subjects: true,
+        classes: true,
+      },
+      take: ITEM_PER_PAGE,
+      skip: ITEM_PER_PAGE * (p - 1),
+    }),
+    db.teacher.count(),
+  ]);
+
+  console.log(count);
+
   return (
     <div className="m-4 mt-0 flex-1 rounded-md bg-secondary bg-white p-4 dark:bg-slate-800">
       {/* Top  */}
