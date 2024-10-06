@@ -84,7 +84,7 @@ const StudentsListPage = () => {
             </button>
           </Link>
           {role === "admin" && (
-            <FormModal table="student" type="delete" id={item.id} />
+            <FormModal table="teacher" type="delete" id={item.id} />
           )}
         </div>
       </td>

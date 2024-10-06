@@ -1,5 +1,6 @@
 import Announcements from "@/components/users/Announcements";
 import BigCalendar from "@/components/users/BigCalendar";
+import FormModal from "@/components/users/FormModal";
 import Performance from "@/components/users/Performance";
 import { role } from "@/lib/data";
 import Image from "next/image";
@@ -26,7 +27,8 @@ const SingleTeacherPage = () => {
             <div className="flex w-2/3 flex-col justify-between gap-4">
               <div className="flex items-center gap-4">
                 <h1 className="text-xl font-semibold">Leonard Snyder</h1>
-                {/* {role === "admin" && <FormModal
+
+                <FormModal
                   table="teacher"
                   type="update"
                   data={{
@@ -43,7 +45,7 @@ const SingleTeacherPage = () => {
                     sex: "male",
                     img: "https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&w=1200",
                   }}
-                />} */}
+                />
               </div>
               <p className="text-sm text-gray-500">
                 Lorem ipsum, dolor sit amet consectetur adipisicing elit.
