@@ -3,68 +3,68 @@ import Table from "@/components/shared/Table";
 import TableSearch from "@/components/shared/TableSearch";
 import FormModal from "@/components/users/FormModal";
 import { role, teachersData } from "@/lib/data";
+import db from "@/lib/db";
+import { Class, Subject, Teacher } from "@prisma/client";
 import { Eye, PlusCircle, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-type Teacher = {
-  id: number;
-  teacherId: string;
-  name: string;
-  email?: string;
-  photo: string;
-  phone: string;
-  subjects: string[];
-  classes: string[];
-  address: string;
-};
+type TeacherList = Teacher & { subjects: Subject[] } & { classes: Class[] };
 
-const columns = [
-  {
-    header: "Info",
-    accessor: "info",
-  },
-  {
-    header: "Teacher ID",
-    accessor: "teacherId",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Subjects",
-    accessor: "subjects",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Classes",
-    accessor: "classes",
-    className: "hidden xl:table-cell",
-  },
-  {
-    header: "Phone",
-    accessor: "phone",
-    className: "hidden lg:table-cell",
-  },
-  {
-    header: "Address",
-    accessor: "address",
-    className: "hidden lg:table-cell",
-  },
-  {
-    header: "Actions",
-    accessor: "action",
-  },
-];
+const TeachersListPage = async () => {
+  const data = await db.teacher.findMany({
+    include: {
+      subjects: true,
+      classes: true,
+    },
+  });
 
-const TeachersListPage = () => {
-  const renderRow = (item: Teacher) => (
+  console.log(data);
+
+  const columns = [
+    {
+      header: "Info",
+      accessor: "info",
+    },
+    {
+      header: "Teacher ID",
+      accessor: "teacherId",
+      className: "hidden md:table-cell",
+    },
+    {
+      header: "Subjects",
+      accessor: "subjects",
+      className: "hidden md:table-cell",
+    },
+    {
+      header: "Classes",
+      accessor: "classes",
+      className: "hidden xl:table-cell",
+    },
+    {
+      header: "Phone",
+      accessor: "phone",
+      className: "hidden lg:table-cell",
+    },
+    {
+      header: "Address",
+      accessor: "address",
+      className: "hidden lg:table-cell",
+    },
+    {
+      header: "Actions",
+      accessor: "action",
+    },
+  ];
+  const renderRow = (item: TeacherList) => (
     <tr
       key={item.id}
       className="border-b border-gray-200 text-sm even:bg-slate-50 hover:bg-lamaPurpleLight dark:even:bg-slate-600"
     >
       <td className="flex items-center gap-4 p-4">
         <Image
-          src={item.photo}
+          src={item.img || "/noAvatar.png"}
           alt=""
           width={40}
           height={40}
@@ -77,9 +77,13 @@ const TeachersListPage = () => {
           </p>
         </div>
       </td>
-      <td className="hidden md:table-cell">{item.teacherId}</td>
-      <td className="hidden md:table-cell">{item.subjects.join(",")}</td>
-      <td className="hidden xl:table-cell">{item.classes.join(",")}</td>
+      <td className="hidden md:table-cell">{item.username}</td>
+      <td className="hidden md:table-cell">
+        {item.subjects.map((subject) => subject.name).join(",")}
+      </td>
+      <td className="hidden xl:table-cell">
+        {item.classes.map((classItem) => classItem.name).join(",")}
+      </td>
       <td className="hidden lg:table-cell">{item.phone}</td>
       <td className="hidden lg:table-cell">{item.address}</td>
       <td>
@@ -89,9 +93,9 @@ const TeachersListPage = () => {
               <Eye className="m-1 text-gray-600" />
             </button>
           </Link>
-          {role === "admin" && (
+          {/* {role === "admin" && (
             <FormModal table="teacher" type="delete" id={item.id} />
-          )}
+          )} */}
         </div>
       </td>
     </tr>
@@ -115,7 +119,7 @@ const TeachersListPage = () => {
         </div>
       </div>
       {/* List */}
-      <Table columns={columns} renderRow={renderRow} data={teachersData} />
+      <Table columns={columns} renderRow={renderRow} data={data} />
       {/* Pagination */}
       <Pagination />
     </div>
