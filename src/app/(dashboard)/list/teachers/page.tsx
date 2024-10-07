@@ -113,8 +113,6 @@ const TeachersListPage = async ({
     db.teacher.count(),
   ]);
 
-  console.log(count);
-
   return (
     <div className="m-4 mt-0 flex-1 rounded-md bg-secondary bg-white p-4 dark:bg-slate-800">
       {/* Top  */}
@@ -136,7 +134,7 @@ const TeachersListPage = async ({
       {/* List */}
       <Table columns={columns} renderRow={renderRow} data={data} />
       {/* Pagination */}
-      <Pagination />
+      <Pagination page={p} count={count} />
     </div>
   );
 };
