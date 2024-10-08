@@ -121,16 +121,16 @@ const ClassesListPage = async ({
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
             {role === "admin" && (
-              <button className="flex h-8 w-8 items-center justify-center rounded-full bg-lamaYellow">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-lamaYellow">
                 <PlusCircle className="m-1 text-gray-600" />
                 <FormModal table="teacher" type="create" />
-              </button>
+              </div>
             )}
           </div>
         </div>
       </div>
       {/* LIST */}
-      <Table columns={columns} renderRow={renderRow} data={classesData} />
+      <Table columns={columns} renderRow={renderRow} data={data} />
       {/* PAGINATION */}
       <Pagination page={p} count={count} />
     </div>
