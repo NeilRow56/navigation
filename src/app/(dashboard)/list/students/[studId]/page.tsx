@@ -118,7 +118,10 @@ const SingleStudentPage = () => {
         <div className="rounded-md bg-white p-4">
           <h1 className="text-xl font-semibold">Shortcuts</h1>
           <div className="mt-4 flex flex-wrap gap-4 text-xs text-gray-500">
-            <Link className="rounded-md bg-lamaSkyLight p-3" href="/">
+            <Link
+              className="rounded-md bg-lamaSkyLight p-3"
+              href={`/list/lessons?classId=${2}`}
+            >
               Student&apos;s Lessons
             </Link>
             <Link
