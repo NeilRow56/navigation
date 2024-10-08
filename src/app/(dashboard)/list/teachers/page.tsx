@@ -136,13 +136,7 @@ const TeachersListPage = async ({
       take: ITEM_PER_PAGE,
       skip: ITEM_PER_PAGE * (p - 1),
     }),
-    db.teacher.count({
-      where: {
-        lessons: {
-          some: { classId: parseInt(queryParams.classId!) },
-        },
-      },
-    }),
+    db.teacher.count({ where: query }),
   ]);
 
   return (
