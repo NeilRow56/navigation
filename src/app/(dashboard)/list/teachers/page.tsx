@@ -5,7 +5,7 @@ import FormModal from "@/components/users/FormModal";
 import { role, teachersData } from "@/lib/data";
 import db from "@/lib/db";
 import { ITEM_PER_PAGE } from "@/lib/settings";
-import { Class, Subject, Teacher } from "@prisma/client";
+import { Class, Prisma, Subject, Teacher } from "@prisma/client";
 import { Eye, PlusCircle, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -89,9 +89,9 @@ const TeachersListPage = async ({
               <Eye className="m-1 text-gray-600" />
             </button>
           </Link>
-          {/* {role === "admin" && (
+          {role === "admin" && (
             <FormModal table="teacher" type="delete" id={item.id} />
-          )} */}
+          )}
         </div>
       </td>
     </tr>
@@ -101,8 +101,34 @@ const TeachersListPage = async ({
 
   const p = page ? parseInt(page) : 1;
 
+  // URL PARAMS CONDITION
+
+  const query: Prisma.TeacherWhereInput = {};
+
+  if (queryParams) {
+    for (const [key, value] of Object.entries(queryParams)) {
+      if (value !== undefined) {
+        switch (key) {
+          case "classId":
+            query.lessons = {
+              some: {
+                classId: parseInt(value),
+              },
+            };
+            break;
+          case "search":
+            query.name = { contains: value, mode: "insensitive" };
+            break;
+          default:
+            break;
+        }
+      }
+    }
+  }
+
   const [data, count] = await db.$transaction([
     db.teacher.findMany({
+      where: query,
       include: {
         subjects: true,
         classes: true,
@@ -110,7 +136,13 @@ const TeachersListPage = async ({
       take: ITEM_PER_PAGE,
       skip: ITEM_PER_PAGE * (p - 1),
     }),
-    db.teacher.count(),
+    db.teacher.count({
+      where: {
+        lessons: {
+          some: { classId: parseInt(queryParams.classId!) },
+        },
+      },
+    }),
   ]);
 
   return (

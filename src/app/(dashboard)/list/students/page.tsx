@@ -3,6 +3,9 @@ import Table from "@/components/shared/Table";
 import TableSearch from "@/components/shared/TableSearch";
 import FormModal from "@/components/users/FormModal";
 import { role, studentsData } from "@/lib/data";
+import db from "@/lib/db";
+import { ITEM_PER_PAGE } from "@/lib/settings";
+import { Class } from "@prisma/client";
 import { Eye, PlusCircle, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -51,8 +54,14 @@ const columns = [
   },
 ];
 
-const StudentsListPage = () => {
-  const renderRow = (item: Student) => (
+type StudentList = Student & { class: Class };
+
+const StudentsListPage = async ({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | undefined };
+}) => {
+  const renderRow = (item: StudentList) => (
     <tr
       key={item.id}
       className="border-b border-gray-200 text-sm even:bg-slate-50 hover:bg-lamaPurpleLight dark:even:bg-slate-600"
@@ -72,8 +81,8 @@ const StudentsListPage = () => {
           </p>
         </div>
       </td>
-      <td className="hidden md:table-cell">{item.studentId}</td>
-      <td className="hidden md:table-cell">{item.grade}</td>
+      <td className="hidden md:table-cell">{item.name}</td>
+      {/* <td className="hidden md:table-cell">{item.class.name[0]}</td> */}
       <td className="hidden lg:table-cell">{item.phone}</td>
       <td className="hidden lg:table-cell">{item.address}</td>
       <td>
@@ -90,6 +99,23 @@ const StudentsListPage = () => {
       </td>
     </tr>
   );
+
+  const { page, ...queryParams } = searchParams;
+
+  const p = page ? parseInt(page) : 1;
+
+  const [data, count] = await db.$transaction([
+    db.teacher.findMany({
+      include: {
+        subjects: true,
+        classes: true,
+      },
+      take: ITEM_PER_PAGE,
+      skip: ITEM_PER_PAGE * (p - 1),
+    }),
+    db.teacher.count(),
+  ]);
+
   return (
     <div className="m-4 mt-0 flex-1 rounded-md bg-secondary bg-white p-4 dark:bg-slate-800">
       {/* Top  */}
@@ -111,7 +137,7 @@ const StudentsListPage = () => {
       {/* List */}
       <Table columns={columns} renderRow={renderRow} data={studentsData} />
       {/* Pagination */}
-      <Pagination />
+      <Pagination page={p} count={count} />
     </div>
   );
 };
