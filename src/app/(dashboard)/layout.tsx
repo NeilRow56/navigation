@@ -6,6 +6,7 @@ import PageWrapper from "@/components/frontEnd/PageWrapper";
 import Link from "next/link";
 import Image from "next/image";
 import Menu from "@/components/users/Menu";
+import Navbar from "@/components/frontEnd/Navbar";
 
 export default function DashboardLayout({
   children,
@@ -29,7 +30,8 @@ export default function DashboardLayout({
       </div>
       {/* RIGHT */}
       <div className="flex w-[86%] flex-col overflow-scroll bg-[#F7F8FA] md:w-[92%] lg:w-[84%] 2xl:w-[86%]">
-        <SiteHeader />
+        {/* <SiteHeader /> */}
+        <Navbar />
         {children}
       </div>
     </div>

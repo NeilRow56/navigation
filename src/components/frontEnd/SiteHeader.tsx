@@ -42,6 +42,9 @@ const SiteHeader = () => {
           <div className="flex h-8 w-8 items-center justify-center rounded-full text-center">
             <ThemeToggle />
           </div>
+          <div className="flex flex-col">
+            <span className="text-xs font-medium leading-3">John Doe</span>
+          </div>
           <UserButton />
         </div>
       </div>
