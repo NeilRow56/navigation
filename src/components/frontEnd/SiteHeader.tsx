@@ -9,6 +9,7 @@ import useScroll from "@/hooks/use-scroll";
 import { cn } from "@/lib/utils";
 import { Logo } from "../shared/Logo";
 import { ThemeToggle } from "../dashboard/ThemeToggle";
+import { UserButton } from "@clerk/nextjs";
 
 const SiteHeader = () => {
   const scrolled = useScroll(5);
@@ -17,10 +18,10 @@ const SiteHeader = () => {
   return (
     <div
       className={cn(
-        `sticky inset-x-0 top-0 z-30 w-full transition-all border-b border-gray-200`,
+        `sticky inset-x-0 top-0 z-30 w-full border-b border-gray-200 transition-all`,
         {
           "border-b border-gray-200 bg-white/75 backdrop-blur-lg": scrolled,
-          "border-b border-gray-200 ": selectedLayout,
+          "border-b border-gray-200": selectedLayout,
         },
       )}
     >
@@ -28,19 +29,20 @@ const SiteHeader = () => {
         <div className="flex items-center space-x-4">
           <Link
             href="/"
-            className="flex flex-row space-x-3 items-center justify-center md:hidden"
+            className="flex flex-row items-center justify-center space-x-3 md:hidden"
           >
             {/* <span className="h-7 w-7 bg-zinc-300 rounded-lg" /> */}
-            <span className="font-bold text-xl flex ">
+            <span className="flex text-xl font-bold">
               <Logo />
             </span>
           </Link>
         </div>
 
-        <div className="hidden md:block">
-          <div className="h-8 w-8 rounded-full  flex items-center justify-center text-center">
+        <div className="hidden gap-4 md:flex">
+          <div className="flex h-8 w-8 items-center justify-center rounded-full text-center">
             <ThemeToggle />
           </div>
+          <UserButton />
         </div>
       </div>
     </div>
