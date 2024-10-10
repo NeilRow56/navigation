@@ -3,13 +3,13 @@ import Table from "@/components/shared/Table";
 import TableSearch from "@/components/shared/TableSearch";
 import FormModal from "@/components/users/FormModal";
 
-import { classesData, role } from "@/lib/data";
 import db from "@/lib/db";
 import { ITEM_PER_PAGE } from "@/lib/settings";
+import { auth } from "@clerk/nextjs/server";
 import { Class, Prisma, Teacher } from "@prisma/client";
-import { Edit, PlusCircle, Trash2 } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+
 import React from "react";
 
 type ClassList = Class & { supervisor: Teacher };
@@ -19,6 +19,9 @@ const ClassesListPage = async ({
 }: {
   searchParams: { [key: string]: string | undefined };
 }) => {
+  const { sessionClaims } = auth();
+  const role = (sessionClaims?.metadata as { role?: string })?.role;
+
   const columns = [
     {
       header: "Class Name",
@@ -39,10 +42,14 @@ const ClassesListPage = async ({
       accessor: "supervisor",
       className: "hidden md:table-cell",
     },
-    {
-      header: "Actions",
-      accessor: "action",
-    },
+    ...(role === "admin"
+      ? [
+          {
+            header: "Actions",
+            accessor: "action",
+          },
+        ]
+      : []),
   ];
   const renderRow = (item: ClassList) => (
     <tr

@@ -6,6 +6,7 @@ import FormModal from "@/components/users/FormModal";
 import { role, subjectsData } from "@/lib/data";
 import db from "@/lib/db";
 import { ITEM_PER_PAGE } from "@/lib/settings";
+import { auth } from "@clerk/nextjs/server";
 import { Prisma, Subject, Teacher } from "@prisma/client";
 import { Edit, PlusCircle, Trash2 } from "lucide-react";
 import Image from "next/image";
@@ -14,50 +15,53 @@ import React from "react";
 
 type SubjectList = Subject & { teachers: Teacher[] };
 
-const columns = [
-  {
-    header: "Subject Name",
-    accessor: "name",
-  },
-  {
-    header: "Teachers",
-    accessor: "teachers",
-    className: "hidden md:table-cell",
-  },
-  {
-    header: "Actions",
-    accessor: "action",
-  },
-];
-
-const renderRow = (item: SubjectList) => (
-  <tr
-    key={item.id}
-    className="border-b border-gray-200 text-sm even:bg-slate-50 hover:bg-lamaPurpleLight"
-  >
-    <td className="flex items-center gap-4 p-4">{item.name}</td>
-    <td className="hidden md:table-cell">
-      {item.teachers.map((teacher) => teacher.name).join(",")}
-    </td>
-
-    <td>
-      <div className="flex items-center gap-2">
-        {role === "admin" && (
-          <>
-            <FormModal table="subject" type="update" data={item} />
-            <FormModal table="subject" type="delete" id={item.id} />
-          </>
-        )}
-      </div>
-    </td>
-  </tr>
-);
-
 const SubjectListPage = async ({
   searchParams,
 }: {
   searchParams: { [key: string]: string | undefined };
 }) => {
+  const { sessionClaims } = auth();
+  const role = (sessionClaims?.metadata as { role?: string })?.role;
+
+  const columns = [
+    {
+      header: "Subject Name",
+      accessor: "name",
+    },
+    {
+      header: "Teachers",
+      accessor: "teachers",
+      className: "hidden md:table-cell",
+    },
+    {
+      header: "Actions",
+      accessor: "action",
+    },
+  ];
+
+  const renderRow = (item: SubjectList) => (
+    <tr
+      key={item.id}
+      className="border-b border-gray-200 text-sm even:bg-slate-50 hover:bg-lamaPurpleLight"
+    >
+      <td className="flex items-center gap-4 p-4">{item.name}</td>
+      <td className="hidden md:table-cell">
+        {item.teachers.map((teacher) => teacher.name).join(",")}
+      </td>
+
+      <td>
+        <div className="flex items-center gap-2">
+          {role === "admin" && (
+            <>
+              <FormModal table="subject" type="update" data={item} />
+              <FormModal table="subject" type="delete" id={item.id} />
+            </>
+          )}
+        </div>
+      </td>
+    </tr>
+  );
+
   const { page, ...queryParams } = searchParams;
 
   const p = page ? parseInt(page) : 1;
@@ -106,12 +110,7 @@ const SubjectListPage = async ({
             <button className="flex h-8 w-8 items-center justify-center rounded-full bg-lamaYellow">
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
-            {role === "admin" && (
-              <button className="flex h-8 w-8 items-center justify-center rounded-full bg-lamaYellow">
-                <PlusCircle className="m-1 text-gray-600" />
-                <FormModal table="teacher" type="create" />
-              </button>
-            )}
+            {role === "admin" && <FormModal table="subject" type="create" />}
           </div>
         </div>
       </div>

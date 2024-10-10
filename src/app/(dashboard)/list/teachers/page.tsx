@@ -2,11 +2,12 @@ import Pagination from "@/components/shared/Pagination";
 import Table from "@/components/shared/Table";
 import TableSearch from "@/components/shared/TableSearch";
 import FormModal from "@/components/users/FormModal";
-import { role, teachersData } from "@/lib/data";
+
 import db from "@/lib/db";
 import { ITEM_PER_PAGE } from "@/lib/settings";
+import { auth } from "@clerk/nextjs/server";
 import { Class, Prisma, Subject, Teacher } from "@prisma/client";
-import { Eye, PlusCircle, Trash2 } from "lucide-react";
+import { Eye } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -18,6 +19,9 @@ const TeachersListPage = async ({
 }: {
   searchParams: { [key: string]: string | undefined };
 }) => {
+  const { sessionClaims } = auth();
+  const role = (sessionClaims?.metadata as { role?: string })?.role;
+
   const columns = [
     {
       header: "Info",
@@ -48,10 +52,14 @@ const TeachersListPage = async ({
       accessor: "address",
       className: "hidden lg:table-cell",
     },
-    {
-      header: "Actions",
-      accessor: "action",
-    },
+    ...(role === "admin"
+      ? [
+          {
+            header: "Actions",
+            accessor: "action",
+          },
+        ]
+      : []),
   ];
   const renderRow = (item: TeacherList) => (
     <tr
