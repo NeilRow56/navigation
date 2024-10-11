@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 
 import { SideNavItem } from "@/types";
 import { Icon } from "@iconify/react";
-import { SIDENAV_ITEMS } from "../shared/constants";
+
 import { Logo } from "../shared/Logo";
 import Menu from "../users/Menu";
 

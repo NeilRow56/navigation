@@ -5,6 +5,8 @@ const Announcements = async () => {
   const { userId, sessionClaims } = auth();
   const role = (sessionClaims?.metadata as { role?: string })?.role;
 
+  //These users can see only those announcements that relate to them
+
   const roleConditions = {
     teacher: { lessons: { some: { teacherId: userId! } } },
     student: { students: { some: { id: userId! } } },
