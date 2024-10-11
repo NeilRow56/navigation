@@ -1,6 +1,7 @@
 import Announcements from "@/components/users/Announcements";
 import AttendanceChart from "@/components/users/AttendanceChart";
 import CountChart from "@/components/users/CountChart";
+import CountChartContainer from "@/components/users/CountChartContainer";
 import EventCalendar from "@/components/users/EventCalendar";
 import FinanceChart from "@/components/users/FinanceChart";
 import UserCard from "@/components/users/UserCard";
@@ -8,35 +9,35 @@ import React from "react";
 
 const AdminPage = () => {
   return (
-    <div className="flex flex-col p-4 gap-4 lg:flex-row bg-secondary">
+    <div className="flex flex-col gap-4 bg-secondary p-4 lg:flex-row">
       {/* Left */}
-      <div className="w-full lg:w-2/3 flex flex-col gap-8">
+      <div className="flex w-full flex-col gap-8 lg:w-2/3">
         {/* User Cards */}
-        <div className="flex gap-4 justify-between flex-wrap">
-          <UserCard type="Students" />
-          <UserCard type="Teachers" />
-          <UserCard type="Parents" />
-          <UserCard type="Admin Staff" />
+        <div className="flex flex-wrap justify-between gap-4">
+          <UserCard type="admin" />
+          <UserCard type="teacher" />
+          <UserCard type="student" />
+          <UserCard type="parent" />
         </div>
         {/* MIDDLE CHARTS */}
-        <div className="flex gap-4 flex-col lg:flex-row">
+        <div className="flex flex-col gap-4 lg:flex-row">
           {/* COUNT CHART */}
-          <div className="w-full lg:w-1/3 h-[450px]">
-            <CountChart />
+          <div className="h-[450px] w-full lg:w-1/3">
+            <CountChartContainer />
           </div>
           {/* ATTENDANCE CHART */}
-          <div className="w-full lg:w-2/3 h-[450px]">
+          <div className="h-[450px] w-full lg:w-2/3">
             <AttendanceChart />
           </div>
         </div>
         {/* BOTTOM CHART */}
-        <div className="w-full h-[500px]">
+        <div className="h-[500px] w-full">
           <FinanceChart />
         </div>
       </div>
 
       {/* Right */}
-      <div className="w-full flex flex-col gap-8 lg:w-1/3 bg-green-50">
+      <div className="flex w-full flex-col gap-8 bg-green-50 lg:w-1/3">
         <EventCalendar />
         <Announcements />
       </div>
