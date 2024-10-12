@@ -11,15 +11,17 @@ import {
 import { createSubject } from "@/actions/subject";
 import { useFormState } from "react-dom";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { toast } from "react-toastify";
 
 const SubjectForm = ({
   type,
   data,
+  setOpen,
 }: {
   type: "create" | "update";
   data?: any;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 }) => {
   const {
     register,
@@ -45,10 +47,10 @@ const SubjectForm = ({
   useEffect(() => {
     if (state.success) {
       toast(`Subject has been ${type === "create" ? "created" : "updated"}!`);
-
+      setOpen(false);
       router.refresh();
     }
-  }, [state, router, type]);
+  }, [state, setOpen, router, type]);
 
   return (
     <form className="flex flex-col gap-8" onSubmit={onSubmit}>
