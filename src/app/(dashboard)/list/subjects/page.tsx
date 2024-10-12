@@ -1,17 +1,12 @@
+import { ITEM_PER_PAGE } from "@/lib/settings";
+import { Prisma, Subject, Teacher } from "@prisma/client";
+import Image from "next/image";
+import { auth } from "@clerk/nextjs/server";
+import FormModal from "@/components/users/FormModal";
+import db from "@/lib/db";
+import TableSearch from "@/components/shared/TableSearch";
 import Pagination from "@/components/shared/Pagination";
 import Table from "@/components/shared/Table";
-import TableSearch from "@/components/shared/TableSearch";
-import FormModal from "@/components/users/FormModal";
-
-import { role, subjectsData } from "@/lib/data";
-import db from "@/lib/db";
-import { ITEM_PER_PAGE } from "@/lib/settings";
-import { auth } from "@clerk/nextjs/server";
-import { Prisma, Subject, Teacher } from "@prisma/client";
-import { Edit, PlusCircle, Trash2 } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import React from "react";
 
 type SubjectList = Subject & { teachers: Teacher[] };
 
@@ -48,7 +43,6 @@ const SubjectListPage = async ({
       <td className="hidden md:table-cell">
         {item.teachers.map((teacher) => teacher.name).join(",")}
       </td>
-
       <td>
         <div className="flex items-center gap-2">
           {role === "admin" && (

@@ -5,6 +5,8 @@
 const getLatestMonday = (): Date => {
   const today = new Date();
   const dayOfWeek = today.getDay();
+
+  console.log(dayOfWeek);
   const daysSinceMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
   const latestMonday = today;
   latestMonday.setDate(today.getDate() - daysSinceMonday);
@@ -19,7 +21,7 @@ export const adjustScheduleToCurrentWeek = (
   return lessons.map((lesson) => {
     const lessonDayOfWeek = lesson.start.getDay();
 
-    const daysFromMonday = lessonDayOfWeek === 0 ? 6 : lessonDayOfWeek - 1;
+    const daysFromMonday = lessonDayOfWeek === 0 ? 6 : lessonDayOfWeek;
 
     const adjustedStartDate = new Date(latestMonday);
 

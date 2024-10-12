@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { Toaster } from "sonner";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import {
   ClerkProvider,
@@ -48,7 +49,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             {children}
-            <Toaster richColors position="bottom-right" />
+            <ToastContainer position="bottom-right" theme="light" />
           </ThemeProvider>
         </body>
       </html>

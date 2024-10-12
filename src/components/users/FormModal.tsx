@@ -2,14 +2,20 @@
 
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import React, { useState } from "react";
-// import TeacherForm from "../forms/TeacherForm";
-// import StudentForm from "../forms/StudentForm";
+import { useState } from "react";
+
+// USE LAZY LOADING
+
+// import TeacherForm from "./forms/TeacherForm";
+// import StudentForm from "./forms/StudentForm";
 
 const TeacherForm = dynamic(() => import("../forms/TeacherForm"), {
   loading: () => <h1>Loading...</h1>,
 });
 const StudentForm = dynamic(() => import("../forms/StudentForm"), {
+  loading: () => <h1>Loading...</h1>,
+});
+const SubjectForm = dynamic(() => import("../forms/SubjectForm"), {
   loading: () => <h1>Loading...</h1>,
 });
 
@@ -18,6 +24,7 @@ const forms: {
 } = {
   teacher: (type, data) => <TeacherForm type={type} data={data} />,
   student: (type, data) => <StudentForm type={type} data={data} />,
+  subject: (type, data) => <SubjectForm type={type} data={data} />,
 };
 
 const FormModal = ({
@@ -41,10 +48,9 @@ const FormModal = ({
     | "announcement";
   type: "create" | "update" | "delete";
   data?: any;
-  id?: number | string;
+  id?: number;
 }) => {
   const size = type === "create" ? "w-8 h-8" : "w-7 h-7";
-  const col = type === "create" ? "bg-green-500" : "bg-red-500";
   const bgColor =
     type === "create"
       ? "bg-lamaYellow"
@@ -83,7 +89,6 @@ const FormModal = ({
         <div className="absolute left-0 top-0 z-50 flex h-screen w-screen items-center justify-center bg-black bg-opacity-60">
           <div className="relative w-[90%] rounded-md bg-white p-4 md:w-[70%] lg:w-[60%] xl:w-[50%] 2xl:w-[40%]">
             <Form />
-
             <div
               className="absolute right-4 top-4 cursor-pointer"
               onClick={() => setOpen(false)}
