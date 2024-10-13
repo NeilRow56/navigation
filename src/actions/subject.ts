@@ -24,3 +24,25 @@ export const createSubject = async (
     return { success: false, error: true };
   }
 };
+
+export const updateSubject = async (
+  currentState: CurrentState,
+  data: SubjectSchema,
+) => {
+  try {
+    await db.subject.update({
+      where: {
+        id: data.id,
+      },
+      data: {
+        name: data.name,
+      },
+    });
+
+    // revalidatePath("/list/subjects");
+    return { success: true, error: false };
+  } catch (err) {
+    console.log(err);
+    return { success: false, error: true };
+  }
+};

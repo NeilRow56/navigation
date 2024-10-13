@@ -8,7 +8,7 @@ import {
   subjectSchema,
   SubjectSchema,
 } from "@/app/schemas/formValidationSchemas";
-import { createSubject } from "@/actions/subject";
+import { createSubject, updateSubject } from "@/actions/subject";
 import { useFormState } from "react-dom";
 import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useEffect } from "react";
@@ -33,10 +33,13 @@ const SubjectForm = ({
 
   // AFTER REACT 19 IT'LL BE USEACTIONSTATE
 
-  const [state, formAction] = useFormState(createSubject, {
-    success: false,
-    error: false,
-  });
+  const [state, formAction] = useFormState(
+    type === "create" ? createSubject : updateSubject,
+    {
+      success: false,
+      error: false,
+    },
+  );
 
   const onSubmit = handleSubmit((data) => {
     formAction(data);
@@ -50,7 +53,7 @@ const SubjectForm = ({
       setOpen(false);
       router.refresh();
     }
-  }, [state, setOpen, router, type]);
+  }, [state, router, type, setOpen]);
 
   return (
     <form className="flex flex-col gap-8" onSubmit={onSubmit}>
@@ -68,6 +71,17 @@ const SubjectForm = ({
           register={register}
           error={errors?.name}
         />
+
+        {data && (
+          <InputField
+            label="Id"
+            name="id"
+            defaultValue={data?.id}
+            register={register}
+            error={errors?.id}
+            hidden
+          />
+        )}
       </div>
       {state.error && (
         <span className="text-red-500">Something went wrong!</span>
