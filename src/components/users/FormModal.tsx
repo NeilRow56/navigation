@@ -54,7 +54,7 @@ const forms: {
       type={type}
       data={data}
       setOpen={setOpen}
-      // relatedData={relatedData}
+      relatedData={relatedData}
     />
   ),
 

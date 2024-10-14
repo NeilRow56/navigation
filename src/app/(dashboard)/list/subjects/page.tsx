@@ -7,6 +7,7 @@ import db from "@/lib/db";
 import TableSearch from "@/components/shared/TableSearch";
 import Pagination from "@/components/shared/Pagination";
 import Table from "@/components/shared/Table";
+import FormContainer from "@/components/users/FormContainer";
 
 type SubjectList = Subject & { teachers: Teacher[] };
 
@@ -47,8 +48,8 @@ const SubjectListPage = async ({
         <div className="flex items-center gap-2">
           {role === "admin" && (
             <>
-              <FormModal table="subject" type="update" data={item} />
-              <FormModal table="subject" type="delete" id={item.id} />
+              <FormContainer table="subject" type="update" data={item} />
+              <FormContainer table="subject" type="delete" id={item.id} />
             </>
           )}
         </div>
@@ -104,7 +105,9 @@ const SubjectListPage = async ({
             <button className="flex h-8 w-8 items-center justify-center rounded-full bg-lamaYellow">
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
-            {role === "admin" && <FormModal table="subject" type="create" />}
+            {role === "admin" && (
+              <FormContainer table="subject" type="create" />
+            )}
           </div>
         </div>
       </div>
