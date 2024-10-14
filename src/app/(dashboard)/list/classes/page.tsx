@@ -1,7 +1,7 @@
 import Pagination from "@/components/shared/Pagination";
 import Table from "@/components/shared/Table";
 import TableSearch from "@/components/shared/TableSearch";
-import FormModal from "@/components/users/FormModal";
+import FormContainer from "@/components/users/FormContainer";
 
 import db from "@/lib/db";
 import { ITEM_PER_PAGE } from "@/lib/settings";
@@ -67,8 +67,8 @@ const ClassesListPage = async ({
         <div className="flex items-center gap-2">
           {role === "admin" && (
             <>
-              <FormModal table="subject" type="update" data={item} />
-              <FormModal table="subject" type="delete" id={item.id} />
+              <FormContainer table="class" type="update" data={item} />
+              <FormContainer table="class" type="delete" id={item.id} />
             </>
           )}
         </div>
@@ -130,7 +130,7 @@ const ClassesListPage = async ({
             {role === "admin" && (
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-lamaYellow">
                 <PlusCircle className="m-1 text-gray-600" />
-                <FormModal table="teacher" type="create" />
+                <FormContainer table="class" type="create" />
               </div>
             )}
           </div>

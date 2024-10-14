@@ -8,12 +8,13 @@ import { useFormState } from "react-dom";
 import { toast } from "react-toastify";
 import { FormContainerProps } from "./FormContainer";
 import { deleteSubject } from "@/actions/subject";
+import { deleteClass } from "@/actions/class";
 
 type DeleteFunction = typeof deleteSubject;
 
 const deleteActionMap: Record<string, DeleteFunction> = {
   subject: deleteSubject,
-
+  class: deleteClass,
   // Placeholders pour les futures implémentations
   parent: deleteSubject,
   lesson: deleteSubject,
@@ -38,6 +39,9 @@ const StudentForm = dynamic(() => import("../forms/StudentForm"), {
 const SubjectForm = dynamic(() => import("../forms/SubjectForm"), {
   loading: () => <h1>Loading...</h1>,
 });
+const ClassForm = dynamic(() => import("../forms/ClassForm"), {
+  loading: () => <h1>Loading...</h1>,
+});
 
 // TODO: OTHER FORMS
 
@@ -51,6 +55,14 @@ const forms: {
 } = {
   subject: (setOpen, type, data, relatedData) => (
     <SubjectForm
+      type={type}
+      data={data}
+      setOpen={setOpen}
+      relatedData={relatedData}
+    />
+  ),
+  class: (setOpen, type, data, relatedData) => (
+    <ClassForm
       type={type}
       data={data}
       setOpen={setOpen}
