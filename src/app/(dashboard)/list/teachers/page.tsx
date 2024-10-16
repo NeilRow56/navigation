@@ -1,7 +1,7 @@
 import Pagination from "@/components/shared/Pagination";
 import Table from "@/components/shared/Table";
 import TableSearch from "@/components/shared/TableSearch";
-import FormModal from "@/components/users/FormModal";
+import FormContainer from "@/components/users/FormContainer";
 
 import db from "@/lib/db";
 import { ITEM_PER_PAGE } from "@/lib/settings";
@@ -98,7 +98,7 @@ const TeachersListPage = async ({
             </button>
           </Link>
           {role === "admin" && (
-            <FormModal table="teacher" type="delete" id={item.id} />
+            <FormContainer table="teacher" type="delete" id={item.id} />
           )}
         </div>
       </td>
@@ -161,7 +161,9 @@ const TeachersListPage = async ({
             <button className="flex h-8 w-8 items-center justify-center rounded-full bg-lamaYellow">
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
-            {role === "admin" && <FormModal table="teacher" type="create" />}
+            {role === "admin" && (
+              <FormContainer table="teacher" type="create" />
+            )}
           </div>
         </div>
       </div>

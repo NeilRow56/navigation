@@ -44,7 +44,12 @@ const FormContainer = async ({ table, type, data, id }: FormContainerProps) => {
           select: { id: true, name: true, surname: true },
         });
         relatedData = { teachers: classTeachers, grades: classGrades };
-
+      case "teacher":
+        const teacherSubjects = await db.subject.findMany({
+          select: { id: true, name: true },
+        });
+        relatedData = { subjects: teacherSubjects };
+        break;
       default:
         break;
     }

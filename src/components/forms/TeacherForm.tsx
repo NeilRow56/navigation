@@ -9,13 +9,24 @@ import {
   teacherSchema,
   TeacherSchema,
 } from "@/app/schemas/formValidationSchemas";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useFormState } from "react-dom";
+
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { createTeacher, updateTeacher } from "@/actions/teacher";
+import { CldUploadWidget } from "next-cloudinary";
 
 const TeacherForm = ({
   type,
   data,
+  setOpen,
+  relatedData,
 }: {
   type: "create" | "update";
   data?: any;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  relatedData?: any;
 }) => {
   const {
     register,
@@ -25,9 +36,32 @@ const TeacherForm = ({
     resolver: zodResolver(teacherSchema),
   });
 
+  const [img, setImg] = useState<any>();
+
+  const [state, formAction] = useFormState(
+    type === "create" ? createTeacher : updateTeacher,
+    {
+      success: false,
+      error: false,
+    },
+  );
+
   const onSubmit = handleSubmit((data) => {
     console.log(data);
+    formAction({ ...data, img: img?.secure_url });
   });
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (state.success) {
+      toast(`Teacher has been ${type === "create" ? "created" : "updated"}!`);
+      setOpen(false);
+      router.refresh();
+    }
+  }, [state, router, type, setOpen]);
+
+  const { subjects } = relatedData;
 
   return (
     <form className="flex flex-col gap-8" onSubmit={onSubmit}>
@@ -118,24 +152,65 @@ const TeacherForm = ({
             hidden
           />
         )}
-      </div>
-      <div className="flex w-full flex-col gap-2 md:w-1/4">
-        <label className="text-xs text-gray-500">Sex</label>
-        <select
-          className="w-full rounded-md p-2 text-sm ring-[1.5px] ring-gray-300"
-          {...register("sex")}
-          defaultValue={data?.sex}
+        <div className="flex w-full flex-col gap-2 md:w-1/4">
+          <label className="text-xs text-gray-500">Sex</label>
+          <select
+            className="w-full rounded-md p-2 text-sm ring-[1.5px] ring-gray-300"
+            {...register("sex")}
+            defaultValue={data?.sex}
+          >
+            <option value="MALE">Male</option>
+            <option value="FEMALE">Female</option>
+          </select>
+          {errors.sex?.message && (
+            <p className="text-xs text-red-400">
+              {errors.sex.message.toString()}
+            </p>
+          )}
+        </div>
+        <div className="flex w-full flex-col gap-2 md:w-1/4">
+          <label className="text-xs text-gray-500">Subjects</label>
+          <select
+            multiple
+            className="w-full rounded-md p-2 text-sm ring-[1.5px] ring-gray-300"
+            {...register("subjects")}
+            defaultValue={data?.subjects}
+          >
+            {subjects.map((subject: { id: number; name: string }) => (
+              <option value={subject.id} key={subject.id}>
+                {subject.name}
+              </option>
+            ))}
+          </select>
+          {errors.subjects?.message && (
+            <p className="text-xs text-red-400">
+              {errors.subjects.message.toString()}
+            </p>
+          )}
+        </div>
+        <CldUploadWidget
+          uploadPreset="school"
+          onSuccess={(result, { widget }) => {
+            setImg(result.info);
+            widget.close();
+          }}
         >
-          <option value="MALE">Male</option>
-          <option value="FEMALE">Female</option>
-        </select>
-        {errors.sex?.message && (
-          <p className="text-xs text-red-400">
-            {errors.sex.message.toString()}
-          </p>
-        )}
+          {({ open }) => {
+            return (
+              <div
+                className="flex cursor-pointer items-center gap-2 text-xs text-gray-500"
+                onClick={() => open()}
+              >
+                <Image src="/upload.png" alt="" width={28} height={28} />
+                <span>Upload a photo</span>
+              </div>
+            );
+          }}
+        </CldUploadWidget>
       </div>
-
+      {state.error && (
+        <span className="text-red-500">Something went wrong!</span>
+      )}
       <button className="rounded-md bg-blue-400 p-2 text-white">
         {type === "create" ? "Create" : "Update"}
       </button>

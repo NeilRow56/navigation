@@ -9,12 +9,14 @@ import { toast } from "react-toastify";
 import { FormContainerProps } from "./FormContainer";
 import { deleteSubject } from "@/actions/subject";
 import { deleteClass } from "@/actions/class";
+import { deleteTeacher } from "@/actions/teacher";
 
 type DeleteFunction = typeof deleteSubject;
 
 const deleteActionMap: Record<string, DeleteFunction> = {
   subject: deleteSubject,
   class: deleteClass,
+  teacher: deleteTeacher,
   // Placeholders pour les futures implémentations
   parent: deleteSubject,
   lesson: deleteSubject,
@@ -74,8 +76,8 @@ const forms: {
     <TeacherForm
       type={type}
       data={data}
-      // setOpen={setOpen}
-      // relatedData={relatedData}
+      setOpen={setOpen}
+      relatedData={relatedData}
     />
   ),
   student: (setOpen, type, data, relatedData) => (
@@ -100,7 +102,7 @@ const FormModal = ({
     type === "create"
       ? "bg-lamaYellow"
       : type === "update"
-        ? "bg-lamaSky"
+        ? "bg-blue-700"
         : "bg-lamaPurple";
 
   const [open, setOpen] = useState(false);
