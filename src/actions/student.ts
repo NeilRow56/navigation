@@ -1,26 +1,40 @@
 "use server";
 
-import { TeacherSchema } from "@/app/schemas/formValidationSchemas";
+import {
+  StudentSchema,
+  TeacherSchema,
+} from "@/app/schemas/formValidationSchemas";
 import db from "@/lib/db";
 import { clerkClient } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 
 type CurrentState = { success: boolean; error: boolean };
 
-export const createTeacher = async (
+export const createStudent = async (
   currentState: CurrentState,
-  data: TeacherSchema,
+  data: StudentSchema,
 ) => {
+  console.log(data);
   try {
+    //Check if class is already at maximum capacity
+    const classItem = await db.class.findUnique({
+      where: { id: data.classId },
+      include: { _count: { select: { students: true } } },
+    });
+
+    if (classItem && classItem.capacity === classItem._count.students) {
+      return { success: false, error: true };
+    }
+
     const user = await clerkClient().users.createUser({
       username: data.username,
       password: data.password,
       firstName: data.name,
       lastName: data.surname,
-      publicMetadata: { role: "teacher" },
+      publicMetadata: { role: "student" },
     });
 
-    await db.teacher.create({
+    await db.student.create({
       data: {
         id: user.id,
         username: data.username,
@@ -33,15 +47,13 @@ export const createTeacher = async (
         bloodType: data.bloodType,
         sex: data.sex,
         birthday: data.birthday,
-        subjects: {
-          connect: data.subjects?.map((subjectId: string) => ({
-            id: parseInt(subjectId),
-          })),
-        },
+        gradeId: data.gradeId,
+        classId: data.classId,
+        parentId: data.parentId,
       },
     });
 
-    // revalidatePath("/list/teachers");
+    // revalidatePath("/list/students");
     return { success: true, error: false };
   } catch (err) {
     console.log(err);
@@ -49,9 +61,9 @@ export const createTeacher = async (
   }
 };
 
-export const updateTeacher = async (
+export const updateStudent = async (
   currentState: CurrentState,
-  data: TeacherSchema,
+  data: StudentSchema,
 ) => {
   if (!data.id) {
     return { success: false, error: true };
@@ -64,7 +76,7 @@ export const updateTeacher = async (
       lastName: data.surname,
     });
 
-    await db.teacher.update({
+    await db.student.update({
       where: {
         id: data.id,
       },
@@ -80,14 +92,12 @@ export const updateTeacher = async (
         bloodType: data.bloodType,
         sex: data.sex,
         birthday: data.birthday,
-        subjects: {
-          set: data.subjects?.map((subjectId: string) => ({
-            id: parseInt(subjectId),
-          })),
-        },
+        gradeId: data.gradeId,
+        classId: data.classId,
+        parentId: data.parentId,
       },
     });
-    // revalidatePath("/list/teachers");
+    // revalidatePath("/list/students");
     return { success: true, error: false };
   } catch (err) {
     console.log(err);
@@ -95,7 +105,7 @@ export const updateTeacher = async (
   }
 };
 
-export const deleteTeacher = async (
+export const deleteStudent = async (
   currentState: CurrentState,
   data: FormData,
 ) => {
@@ -103,13 +113,13 @@ export const deleteTeacher = async (
   try {
     await clerkClient().users.deleteUser(id);
 
-    await db.teacher.delete({
+    await db.student.delete({
       where: {
         id: id,
       },
     });
 
-    // revalidatePath("/list/teachers");
+    // revalidatePath("/list/students");
     return { success: true, error: false };
   } catch (err) {
     console.log(err);

@@ -1,13 +1,14 @@
 import Pagination from "@/components/shared/Pagination";
 import Table from "@/components/shared/Table";
 import TableSearch from "@/components/shared/TableSearch";
+import FormContainer from "@/components/users/FormContainer";
 import FormModal from "@/components/users/FormModal";
-import { role, studentsData } from "@/lib/data";
+
 import db from "@/lib/db";
 import { ITEM_PER_PAGE } from "@/lib/settings";
 import { auth } from "@clerk/nextjs/server";
 import { Class, Prisma, Student } from "@prisma/client";
-import { Eye, PlusCircle, Trash2 } from "lucide-react";
+import { Eye } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -88,7 +89,7 @@ const StudentsListPage = async ({
             </button>
           </Link>
           {role === "admin" && (
-            <FormModal table="student" type="delete" id={item.id} />
+            <FormContainer table="student" type="delete" id={item.id} />
           )}
         </div>
       </td>
@@ -151,7 +152,9 @@ const StudentsListPage = async ({
             <button className="flex h-8 w-8 items-center justify-center rounded-full bg-lamaYellow">
               <Image src="/sort.png" alt="" width={14} height={14} />
             </button>
-            {role === "admin" && <FormModal table="student" type="create" />}
+            {role === "admin" && (
+              <FormContainer table="student" type="create" />
+            )}
           </div>
         </div>
       </div>

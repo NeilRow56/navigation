@@ -16,6 +16,10 @@ const nextConfig = {
         hostname: "utfs.io",
         port: "",
       },
+      {
+        hostname: "res.cloudinary.com",
+        port: "",
+      },
       { hostname: "images.pexels.com" },
     ],
   },

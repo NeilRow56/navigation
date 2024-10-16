@@ -1,5 +1,6 @@
 import Announcements from "@/components/users/Announcements";
 import BigCalendar from "@/components/users/BigCalendar";
+import BigCalendarContainer from "@/components/users/BigCalendarContainer";
 import FormContainer from "@/components/users/FormContainer";
 
 import Performance from "@/components/users/Performance";
@@ -162,7 +163,7 @@ const SingleTeacherPage = async ({
         {/* BOTTOM */}
         <div className="mt-4 h-[800px] rounded-md bg-white p-4">
           <h1>Teacher&apos;s Schedule</h1>
-          <BigCalendar />
+          <BigCalendarContainer type="teacherId" id={teacher.id} />
         </div>
       </div>
       {/* RIGHT */}
